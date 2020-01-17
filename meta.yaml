@@ -11,43 +11,53 @@ source:
 
 build:
   noarch: python
-  number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+  number: 1
   script_env:
     - VERSION_SUFFIX
 
+# This is the default omero-py metapackage
 requirements:
-  host:
-    - pip
-    - python =3
   run:
-    - future
+    - {{ pin_subpackage('omero-py-minimal', exact=True) }}
     - numpy
     - pillow
-    - python =3
-    - zeroc-ice36-python
 
-test:
-  commands:
-    - omero --help
-    - omero version
-  imports:
-    - omero
-    - omero.api
-    - omero.clients
-    - omero.cmd
-    - omero.constants
-    - omero.fs
-    - omero.gateway
-    - omero.grid
-    - omero.install
-    - omero.metadatastore
-    - omero.model
-    - omero.plugins
-    - omero.romio
-    - omero.sys
-    - omero.util
-    - omero_ext
+outputs:
+  - name: omero-py-minimal
+    build:
+      noarch: python
+      script: "python -m pip install . --no-deps --ignore-installed -vv "
+    files:
+      - '*'
+    requirements:
+      host:
+        - pip
+        - python =3
+      run:
+        - future
+        - python =3
+        - zeroc-ice36-python
+    test:
+      commands:
+        - omero --help
+        - omero version
+      imports:
+        - omero
+        - omero.api
+        - omero.clients
+        - omero.cmd
+        - omero.constants
+        - omero.fs
+        - omero.gateway
+        - omero.grid
+        - omero.install
+        - omero.metadatastore
+        - omero.model
+        - omero.plugins
+        - omero.romio
+        - omero.sys
+        - omero.util
+        - omero_ext
 
 about:
   home: https://www.openmicroscopy.org/
