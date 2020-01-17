@@ -15,6 +15,13 @@ build:
   script_env:
     - VERSION_SUFFIX
 
+# This is the default omero-py metapackage
+requirements:
+  run:
+    - numpy
+    - pillow
+    - omero-py-minimal
+
 outputs:
   - name: omero-py-minimal
     build:
@@ -51,17 +58,6 @@ outputs:
         - omero.sys
         - omero.util
         - omero_ext
-  - name: omero-py
-    build:
-      noarch: python
-    requirements:
-      host:
-        - python =3
-        - pip
-      run:
-        - {{ pin_subpackage('omero-py-minimal', exact=True) }}
-        - numpy
-        - pillow
 
 about:
   home: https://www.openmicroscopy.org/
